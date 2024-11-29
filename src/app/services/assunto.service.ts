@@ -30,4 +30,8 @@ export class AssuntoService {
   excluirAssunto(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/assunto/${id}`);
   }
+
+  getAll(): Observable<Assunto[]> {
+    return this.http.get<Assunto[]>(`${this.apiUrl}/api/assunto/todos`);
+  }
 }

@@ -18,6 +18,10 @@ export class AutorService {
     return this.http.post<any>(`${this.apiUrl}/api/autor`, autor);
   }
 
+  getAll(): Observable<Autor[]> {
+    return this.http.get<Autor[]>(`${this.apiUrl}/api/autor/todos`);
+  }
+
   getAutores(nome: string = '', page: number = 0, size: number = 10): Observable<PaginatedResponse> {
     const params = new HttpParams()
       .set('nome', nome)
