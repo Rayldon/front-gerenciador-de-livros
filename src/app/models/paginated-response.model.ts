@@ -1,7 +1,5 @@
-import { Autor } from './autor.model';
-
 export interface PaginatedResponse {
-  content: Autor[];
+  content: any[];
   totalElements: number;
   totalPages: number;
   number: number;
