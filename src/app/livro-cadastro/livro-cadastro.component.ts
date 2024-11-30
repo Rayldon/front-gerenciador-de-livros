@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LivroService } from '../services/livro.service';
 import { AutorService } from '../services/autor.service';
 import { AssuntoService } from '../services/assunto.service';
+import { LivroDTO } from '../models/livroDTO.model';
 import { Livro } from '../models/livro.model';
 import { Autor } from '../models/autor.model';
 import { Assunto } from '../models/assunto.model';
@@ -16,7 +17,7 @@ import { PaginatedResponse } from '../models/paginated-response.model';
   imports: [FormsModule, CommonModule],
 })
 export class LivroCadastroComponent implements OnInit{
-  livro: Livro = { titulo: '' };
+  livro: LivroDTO = { titulo: '' };
   livros: Livro[] = [];
   autores: Autor[] = [];
   filteredAutores: Autor[] = [];
@@ -46,9 +47,9 @@ export class LivroCadastroComponent implements OnInit{
   }
 
   onSubmit(form: NgForm) {
-    this.livro.autoresIds = this.autoresSelecionados.map(a => a.id);
-    this.livro.assuntosIds = this.assuntosSelecionados.map(a => a.id);
-    console.log(this.livro);
+    this.livro.autoresIds = this.autoresSelecionados.map(a => a.id).filter((id): id is number => id !== undefined);
+    this.livro.assuntosIds = this.assuntosSelecionados.map(a => a.id).filter((id): id is number => id !== undefined);
+
     if (this.livro.titulo) {
       this.livroService.adicionarLivro(this.livro).subscribe({
         next: (value) => {
@@ -70,6 +71,7 @@ export class LivroCadastroComponent implements OnInit{
 
   carregarLivros() {
     this.livroService.getLivros(this.titulo, this.page, this.size).subscribe((response: PaginatedResponse) => {
+      console.log(response.content)
       this.livros = response.content;
       this.totalElements = response.totalElements;
       this.totalPages = response.totalPages;
@@ -86,7 +88,7 @@ export class LivroCadastroComponent implements OnInit{
     this.carregarLivros();
   }
 
-  editarLivro(livro?: Livro) {
+  editarLivro(livro?: LivroDTO) {
     if(livro){
       this.livro = { ...livro };
     }
@@ -109,7 +111,6 @@ export class LivroCadastroComponent implements OnInit{
 
   carregarAutores() {
     this.autorService.getAll().subscribe((response: Autor[]) => {
-      console.log(response);
       this.autores = response;
     });
   }

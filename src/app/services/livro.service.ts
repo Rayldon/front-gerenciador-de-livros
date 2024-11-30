@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../enviroments/enviroment';
 import { Observable } from 'rxjs';
-import { Livro } from '../models/livro.model';
+import { LivroDTO } from '../models/livroDTO.model';
 import { PaginatedResponse } from '../models/paginated-response.model';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class LivroService {
 
   constructor(private http: HttpClient) {}
 
-  adicionarLivro(livro: Livro): Observable<Object> {
+  adicionarLivro(livro: LivroDTO): Observable<Object> {
     return this.http.post<any>(`${this.apiUrl}/api/livro`, livro);
   }
 

@@ -116,7 +116,12 @@
             <thead class="table-dark">
               <tr>
                 <th>ID</th>
-                <th>Titulo</th>
+                <th>Título</th>
+                <th>Editora</th>
+                <th>Edição</th>
+                <th>Ano de publicação</th>
+                <th>Assuntos</th>
+                <th>Autor(es)</th>
                 <th>Ações</th> 
               </tr>
             </thead>
@@ -124,6 +129,15 @@
               <tr *ngFor="let livro of livros">
                 <td>{{ livro.id }}</td>
                 <td>{{ livro.titulo }}</td>
+                <td>{{ livro.editora }}</td>
+                <td>{{ livro.edicao }}</td>
+                <td>{{ livro.anoPublicacao }}</td>
+                <td>
+                  <ul><li *ngFor="let assunto of livro.assuntos">{{ assunto.descricao }}</li></ul>
+                </td>
+                <td>
+                  <ul><li *ngFor="let autor of livro.autores">{{ autor.nome }}</li></ul>
+                </td>
                 <td>
                     <button class="btn btn-warning btn-sm" (click)="editarLivro(livro)">
                       <i class="fa fa-edit"></i>
