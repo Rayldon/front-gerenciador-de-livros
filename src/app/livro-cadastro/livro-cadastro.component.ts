@@ -88,9 +88,11 @@ export class LivroCadastroComponent implements OnInit{
     this.carregarLivros();
   }
 
-  editarLivro(livro?: LivroDTO) {
+  editarLivro(livro?: Livro) {
     if(livro){
       this.livro = { ...livro };
+      livro.autores?.forEach(a => this.autoresSelecionados.push({id: a.id, descricao: a.nome}));
+      livro.assuntos?.forEach(a => this.assuntosSelecionados.push({id: a.id, descricao: a.descricao}));
     }
   }
 
@@ -127,11 +129,11 @@ export class LivroCadastroComponent implements OnInit{
     this.autores = [];
   }
 
-  isAutorSelecionado(nome: string): boolean {
-    return this.autoresSelecionados.some(autor => autor.descricao.toLowerCase() === nome.toLowerCase());
+  isAutorSelecionado(nome?: string): boolean {
+    return this.autoresSelecionados.some(autor => autor.descricao?.toLowerCase() === nome?.toLowerCase());
   }
 
-  removerAutor(id: number): void {
+  removerAutor(id?: number): void {
     this.autoresSelecionados = this.autoresSelecionados.filter(
       (autor) => autor.id !== id
     );
@@ -155,11 +157,11 @@ export class LivroCadastroComponent implements OnInit{
     this.assuntos = [];
   }
 
-  isAssuntoSelecionado(descricao: string): boolean {
-    return this.assuntosSelecionados.some(assunto => assunto.descricao.toLowerCase() === descricao.toLowerCase());
+  isAssuntoSelecionado(descricao?: string): boolean {
+    return this.assuntosSelecionados.some(assunto => assunto.descricao?.toLowerCase() === descricao?.toLowerCase());
   }
 
-  removerAssunto(id: number): void {
+  removerAssunto(id?: number): void {
     this.assuntosSelecionados = this.assuntosSelecionados.filter(
       (assunto) => assunto.id !== id
     );
