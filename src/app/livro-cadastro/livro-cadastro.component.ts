@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { LivroService } from '../services/livro.service';
 import { AutorService } from '../services/autor.service';
 import { AssuntoService } from '../services/assunto.service';
-import { LivroDTO } from '../models/livroDTO.model';
+import { LivroDTO } from '../models/livro.dto';
 import { Livro } from '../models/livro.model';
 import { Autor } from '../models/autor.model';
+import { AutoCompleteDTO } from '../models/auto-complete.dto';
 import { Assunto } from '../models/assunto.model';
 import { PaginatedResponse } from '../models/paginated-response.model';
 
@@ -19,15 +20,14 @@ import { PaginatedResponse } from '../models/paginated-response.model';
 export class LivroCadastroComponent implements OnInit{
   livro: LivroDTO = { titulo: '' };
   livros: Livro[] = [];
-  autores: Autor[] = [];
-  filteredAutores: Autor[] = [];
-  autoresSelecionados: Autor[] = [];
-  searchQuery = '';
 
-  assuntos: Assunto[] = [];
-  filteredAssuntos: Assunto[] = [];
-  assuntosSelecionados: Assunto[] = [];
-  searchQueryAssunto = '';
+  autores: AutoCompleteDTO[] = [];
+  autoresSelecionados: AutoCompleteDTO[] = [];
+  searchQuery: string = '';
+
+  assuntos: AutoCompleteDTO[] = [];
+  assuntosSelecionados: AutoCompleteDTO[] = [];
+  searchQueryAssunto: string = '';
 
   totalElements: number = 0;
   totalPages: number = 0; 
@@ -42,8 +42,6 @@ export class LivroCadastroComponent implements OnInit{
 
   ngOnInit() {
     this.carregarLivros();
-    this.carregarAutores();
-    this.carregarAssuntos();
   }
 
   onSubmit(form: NgForm) {
@@ -67,6 +65,8 @@ export class LivroCadastroComponent implements OnInit{
   resetForm(form: NgForm) {
     form.reset();
     this.livro = { titulo: '' };
+    this.assuntosSelecionados = [];
+    this.autoresSelecionados = [];
   }
 
   carregarLivros() {
@@ -109,81 +109,57 @@ export class LivroCadastroComponent implements OnInit{
     }
   }
 
-  carregarAutores() {
-    this.autorService.getAll().subscribe((response: Autor[]) => {
-      this.autores = response;
+  onSearch(): void {
+    if (this.searchQuery.trim() === '') {
+      this.autores = [];
+      return;
+    }
+    this.autorService.autocomplete(this.searchQuery).subscribe((data) => {
+      this.autores = data;
     });
   }
 
-  onSearch(): void {
-    if (this.searchQuery.trim()) {
-      this.filteredAutores = this.autores.filter((autor) =>
-        autor.nome.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    } else {
-      this.filteredAutores = [];
-    }
-  }
-
-  selecionarAutor(autor: any): void {
-    this.searchQuery = autor.nome;
-    this.filteredAutores = [];
-  }
-
-  adicionarAutor(): void {
-    const autor = this.autores.find(a => a.nome.toLowerCase() === this.searchQuery.toLowerCase());
-    if (autor && !this.isAutorSelecionado(autor.nome)) {
+  selecionarAutor(autor: AutoCompleteDTO): void {
+    if (autor && !this.isAutorSelecionado(autor.descricao)) {
       this.autoresSelecionados.push(autor);
     }
     this.searchQuery = '';
-    this.filteredAutores = [];
+    this.autores = [];
   }
 
   isAutorSelecionado(nome: string): boolean {
-    return this.autoresSelecionados.some(autor => autor.nome.toLowerCase() === nome.toLowerCase());
+    return this.autoresSelecionados.some(autor => autor.descricao.toLowerCase() === nome.toLowerCase());
   }
 
-  removerAutor(id: any): void {
+  removerAutor(id: number): void {
     this.autoresSelecionados = this.autoresSelecionados.filter(
       (autor) => autor.id !== id
     );
   }
 
-  carregarAssuntos() {
-    this.assuntoService.getAll().subscribe((response: Assunto[]) => {
-      this.assuntos = response;
+  onSearchAssunto(): void {
+    if (this.searchQueryAssunto.trim() === '') {
+      this.assuntos = [];
+      return;
+    }
+    this.assuntoService.autocomplete(this.searchQueryAssunto).subscribe((data) => {
+      this.assuntos = data;
     });
   }
 
-  onSearchAssunto(): void {
-    if (this.searchQueryAssunto.trim()) {
-      this.filteredAssuntos = this.assuntos.filter((assunto) =>
-        assunto.descricao && assunto.descricao.toLowerCase().includes(this.searchQueryAssunto.toLowerCase())
-      );
-    } else {
-      this.filteredAssuntos = [];
-    }
-  }
-
-  selecionarAssunto(assunto: any): void {
-    this.searchQueryAssunto = assunto.descricao;
-    this.filteredAssuntos = [];
-  }
-
-  adicionarAssunto(): void {
-    const assunto = this.assuntos.find(a => a.descricao && a.descricao.toLowerCase() === this.searchQueryAssunto.toLowerCase());
-    if (assunto && !this.isAutorSelecionado(assunto.descricao)) {
+  selecionarAssunto(assunto: AutoCompleteDTO): void {
+    if (assunto && !this.isAssuntoSelecionado(assunto.descricao)) {
       this.assuntosSelecionados.push(assunto);
     }
     this.searchQueryAssunto = '';
-    this.filteredAutores = [];
+    this.assuntos = [];
   }
 
   isAssuntoSelecionado(descricao: string): boolean {
     return this.assuntosSelecionados.some(assunto => assunto.descricao.toLowerCase() === descricao.toLowerCase());
   }
 
-  removerAssunto(id: any): void {
+  removerAssunto(id: number): void {
     this.assuntosSelecionados = this.assuntosSelecionados.filter(
       (assunto) => assunto.id !== id
     );

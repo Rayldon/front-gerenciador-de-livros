@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../enviroments/enviroment';
 import { Observable } from 'rxjs';
-import { LivroDTO } from '../models/livroDTO.model';
+import { LivroDTO } from '../models/livro.dto';
 import { PaginatedResponse } from '../models/paginated-response.model';
 
 @Injectable({

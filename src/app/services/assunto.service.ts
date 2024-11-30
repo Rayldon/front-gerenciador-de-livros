@@ -4,6 +4,7 @@ import { environment } from '../../enviroments/enviroment';
 import { Observable } from 'rxjs';
 import { Assunto } from '../models/assunto.model';
 import { PaginatedResponse } from '../models/paginated-response.model';
+import { AutoCompleteDTO } from './../models/auto-complete.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class AssuntoService {
     return this.http.delete(`${this.apiUrl}/api/assunto/${id}`);
   }
 
-  getAll(): Observable<Assunto[]> {
-    return this.http.get<Assunto[]>(`${this.apiUrl}/api/assunto/todos`);
+  autocomplete(searchQuery: string): Observable<AutoCompleteDTO[]> {
+    return this.http.get<AutoCompleteDTO[]>(`${this.apiUrl}/api/assunto/autocomplete/${searchQuery}`);
   }
 }

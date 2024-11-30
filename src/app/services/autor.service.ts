@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../enviroments/enviroment';
 import { Observable } from 'rxjs';
 import { Autor } from './../models/autor.model';
+import { AutoCompleteDTO } from './../models/auto-complete.dto';
 import { PaginatedResponse } from './../models/paginated-response.model';
 
 @Injectable({
@@ -18,8 +19,8 @@ export class AutorService {
     return this.http.post<any>(`${this.apiUrl}/api/autor`, autor);
   }
 
-  getAll(): Observable<Autor[]> {
-    return this.http.get<Autor[]>(`${this.apiUrl}/api/autor/todos`);
+  autocomplete(searchQuery: string): Observable<AutoCompleteDTO[]> {
+    return this.http.get<AutoCompleteDTO[]>(`${this.apiUrl}/api/autor/autocomplete/${searchQuery}`);
   }
 
   getAutores(nome: string = '', page: number = 0, size: number = 10): Observable<PaginatedResponse> {
