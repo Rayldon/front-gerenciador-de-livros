@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { LivroService } from '../services/livro.service';
 import { AutorService } from '../services/autor.service';
 import { AssuntoService } from '../services/assunto.service';
@@ -16,6 +16,7 @@ import { PaginatedResponse } from '../models/paginated-response.model';
   templateUrl: './livro-cadastro.component.html',
   standalone: true,
   imports: [FormsModule, CommonModule],
+  providers: [CurrencyPipe]
 })
 export class LivroCadastroComponent implements OnInit{
   livro: LivroDTO = { titulo: '' };
@@ -37,7 +38,8 @@ export class LivroCadastroComponent implements OnInit{
 
   constructor(private livroService: LivroService,
     private autorService: AutorService,
-    private assuntoService: AssuntoService
+    private assuntoService: AssuntoService,
+    private currencyPipe: CurrencyPipe
   ) {}
 
   ngOnInit() {
@@ -165,5 +167,21 @@ export class LivroCadastroComponent implements OnInit{
     this.assuntosSelecionados = this.assuntosSelecionados.filter(
       (assunto) => assunto.id !== id
     );
+  }
+
+  formatCurrency() {
+    return this.currencyPipe.transform(this.livro.valor, 'BRL', 'symbol', '1.2-2');
+  }
+
+  onValueChange(event: any) {
+    let value = event.target.value.replace(/\D/g, '');
+    this.livro.valor = parseInt(value, 10) / 100;
+  }
+
+  allowNumbersOnly(event: KeyboardEvent) {
+    const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'];
+    if (!allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
   }
 }

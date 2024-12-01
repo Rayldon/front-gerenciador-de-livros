@@ -7,6 +7,7 @@ export interface LivroDTO {
     editora?: string;
     edicao?: number;
     anoPublicacao?: string;
+    valor?: number;
     autoresIds?: number[];
     assuntosIds?: number[];
 }
