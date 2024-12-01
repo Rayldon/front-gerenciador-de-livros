@@ -8,25 +8,25 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/cadastro-livro" routerLinkActive="active">Cadastro de Livro</a>
+            <li class="nav-item" routerLinkActive="active">
+              <a class="nav-link" [routerLink]="['/cadastro-livro']">Cadastro de Livro</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+              <a class="nav-link" [routerLink]="['/cadastro-assunto']">Cadastro de Assunto</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+              <a class="nav-link" [routerLink]="['/cadastro-autor']">Cadastro de Autor</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/cadastro-assunto" routerLinkActive="active">Cadastro de Assunto</a>
+              <a class="nav-link" [href]="apiUrl + '/api/relatorio'" target="_blank">Gerar Relatório</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/cadastro-autor" routerLinkActive="active">Cadastro de Autor</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ apiUrl }}/api/relatorio" target="_blank">Gerar Relatório</a>
-            </li>
-          </ul>
+          </ul>   
         </div>
       </div>
     </nav>
     
     <div class="container" style="margin-top: 70px;">
-      <!-- Conteúdo da sua página aqui -->
+      
     </div>
     
     
