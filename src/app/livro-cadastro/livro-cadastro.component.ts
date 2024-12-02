@@ -58,7 +58,7 @@ export class LivroCadastroComponent implements OnInit{
           this.carregarLivros();
         },
         error: (error) => {
-          alert('Erro ao salvar livro!');
+          alert(error.error);
         }
       });
     }
